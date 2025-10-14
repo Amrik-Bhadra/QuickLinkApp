@@ -1,17 +1,23 @@
 package com.amrik.quicklink.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
+    // Inject the allowed origins from application.properties
+    @Value("${cors.allowed-origins}")
+    private String[] allowedOrigins;
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**") // This applies the CORS configuration to all endpoints
-                .allowedOrigins("http://localhost:5173") // The origin of your React app
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // The HTTP methods you want to allow
-                .allowedHeaders("*") // Allows all headers
+        registry.addMapping("/**")
+                .allowedOrigins(allowedOrigins) // Use the injected value
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
                 .allowCredentials(true);
     }
 }
