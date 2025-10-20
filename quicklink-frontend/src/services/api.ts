@@ -15,7 +15,7 @@ export interface ShortenRequestPayload {
 
 // Create an Axios instance with the base URL of our backend
 const apiClient = axios.create({
-  baseURL: 'http://localhost:8080/api/v1',
+  baseURL: import.meta.env.VITE_BASE_URL,
 });
 
 // The function to call the /url/shorten endpoint
