@@ -1,11 +1,11 @@
-import { Github, Link } from 'lucide-react';
+import { Github } from 'lucide-react';
 
 export function Header() {
   return (
     <header className="py-2 border-b border-gray-300">
       <div className="container mx-auto px-4 flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <Link className="text-blue-600" size={32} />
+          <img src='/urllogo.png' className='h-8' />
           <h1 className="text-2xl font-bold text-slate-800">QuickLink</h1>
         </div>
         <a
