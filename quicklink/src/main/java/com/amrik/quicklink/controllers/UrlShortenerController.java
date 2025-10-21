@@ -1,8 +1,10 @@
 package com.amrik.quicklink.controllers;
 
+import com.amrik.quicklink.dtos.LinkHistoryResponse;
 import com.amrik.quicklink.dtos.ShortenRequest;
 import com.amrik.quicklink.dtos.UrlStatsResponse;
 import com.amrik.quicklink.model.UrlMapping;
+import com.amrik.quicklink.model.User;
 import com.amrik.quicklink.services.UrlShortenerService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,9 +12,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/url")
@@ -69,5 +74,21 @@ public class UrlShortenerController {
         }
 
         return baseUrl.toString();
+    }
+
+    @GetMapping("/my-links")
+    public ResponseEntity<List<LinkHistoryResponse>> getMyLinks(
+            @AuthenticationPrincipal User user,
+            HttpServletRequest servletRequest
+    ) {
+        String baseUrl = getBaseURL(servletRequest);
+        List<UrlMapping> userLinks = urlShortenerService.getLinksByUser(user);
+
+        // Convert the list of UrlMapping objects to a list of DTOs
+        List<LinkHistoryResponse> response = userLinks.stream()
+                .map(link -> new LinkHistoryResponse(baseUrl + "/" + link.getShortCode(), link.getLongUrl()))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(response);
     }
 }

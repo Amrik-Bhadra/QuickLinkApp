@@ -2,11 +2,13 @@ package com.amrik.quicklink.services;
 
 import com.amrik.quicklink.dtos.ShortenRequest;
 import com.amrik.quicklink.model.UrlMapping;
+import com.amrik.quicklink.model.User;
 import com.amrik.quicklink.repository.UrlMappingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -85,6 +87,8 @@ public class UrlShortenerService {
         return urlMappingOptional;
     }
 
-
+    public List<UrlMapping> getLinksByUser(User user) {
+        return urlMappingRepository.findAllByUser(user);
+    }
 
 }

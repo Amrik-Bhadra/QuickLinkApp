@@ -25,4 +25,12 @@ public class UrlMapping {
     private LocalDateTime expiresAt;
 
     private long clickCount;
+
+    /**
+        Establishes a many-to-one relationship with the User entity.
+        This means many UrlMapping entries can belong to one User.
+     */
+    @ManyToOne(fetch = FetchType.LAZY) // LAZY fetching is a performance optimization
+    @JoinColumn(name = "user_id") // This creates a "user_id" foreign key column in the url_mapping table
+    private User user;
 }
